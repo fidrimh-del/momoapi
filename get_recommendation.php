@@ -23,21 +23,21 @@ try {
     $url = "https://prod.nd-api.com/chat";
     
     $payload = [
-    "conversation_id"    => $conversationId, 
-    "character_id"       => $characterId,
-    "user_persona_id"    => "", 
-    "language"           => "en", 
-    "inference_model"    => $inferenceModel,
-    "inference_settings" => [
-        "max_new_tokens" => 60,   // saran pendek saja
-        "temperature"    => 0.7,
-        "top_p"          => 0.7,
-        "top_k"          => 90
-    ],
-    "autopilot"          => false,
-    "continue_chat"      => false,
-    "message"            => "[System: Suggest ONE short natural reply for the USER to send next in this roleplay, based on the character's last messages above. Write from the user's perspective, in the same language as the conversation. Output ONLY the suggested message text — no explanations, no quotation marks.]"
-];
+        "conversation_id"    => $conversationId, 
+        "character_id"       => $characterId,
+        "user_persona_id"    => "aa7c735b-a39b-492e-8d93-7f4366a6459b", 
+        "language"           => "en", 
+        "inference_model"    => $inferenceModel,
+        "inference_settings" => [
+            "max_new_tokens" => 180,
+            "temperature"    => 0.7,
+            "top_p"          => 0.7,
+            "top_k"          => 90
+        ],
+        "autopilot"          => true,  // KUNCI: Autopilot aktif
+        "continue_chat"      => false,
+        "message"            => ""     // KUNCI: Pesan dikosongkan
+    ];
 
     $headers = [
         "Accept: application/json",
