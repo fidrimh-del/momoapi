@@ -52,7 +52,7 @@ try {
     $payload = [
         "conversation_id"    => $conversationId, 
         "character_id"       => $characterId,
-        "user_persona_id"    => "", // KOSONGKAN agar tidak memakai persona global akun Anda
+        "user_persona_id"    => "aa7c735b-a39b-492e-8d93-7f4366a6459b", // KOSONGKAN agar tidak memakai persona global akun Anda
         "language"           => $appLanguage, // Sesuaikan jika bot Anda berbahasa Indonesia
         "inference_model"    => $inferenceModel,
         "inference_settings" => [
