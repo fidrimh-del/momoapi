@@ -26,7 +26,7 @@ try {
     $payload = [
         "conversation_id"    => $conversationId, 
         "character_id"       => $characterId,
-        "user_persona_id"    => "", 
+        "user_persona_id"    => "aa7c735b-a39b-492e-8d93-7f4366a6459b", 
         "language"           => "en", 
         "inference_model"    => $inferenceModel,
         "inference_settings" => [
