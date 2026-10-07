@@ -14,7 +14,7 @@ $userMessage    = $inputData['message'] ?? '';
 $localUserName  = $inputData['local_user_name'] ?? 'User'; // Data dari DB Lokal Anda
 $localPersona   = $inputData['local_persona'] ?? 'Seorang manusia.'; // Data dari DB Lokal
 $localGender    = $inputData['local_gender'] ?? 'Tidak disebutkan'; // Data gender dari DB Lokal
-
+$appLanguage    = $inputData['app_language'] ?? 'en';
 // Nama asli akun SpicyChat Anda (untuk di-filter nanti)
 $accountName    = "hellcat"; 
 
@@ -22,6 +22,13 @@ if (empty($characterId) || empty($userMessage)) {
     echo json_encode(["status" => "error", "message" => "Parameter character_id atau message tidak boleh kosong."]);
     exit;
 }
+
+$langNames = [
+    'id' => 'Indonesian', 'en' => 'English', 'es' => 'Spanish',
+    'pt' => 'Portuguese', 'fr' => 'French', 'de' => 'German',
+    'ja' => 'Japanese', 'ko' => 'Korean',
+];
+$replyLang = $langNames[$appLanguage] ?? 'English';
 
 try {
     // 2. Dapatkan Token API
@@ -34,7 +41,7 @@ try {
     // Jika conversation_id kosong, ini adalah awal obrolan. Kita suntikkan instruksi mutlak.
     if ($conversationId === null) {
         // LAPIS PERTAMA: Instruksi mutlak nama + Aturan Format Ekstrem untuk tanda bintang
-        $injection = "[System Directive: The human's name is STRICTLY '{$localUserName}' and their gender is {$localGender}. You are FORBIDDEN from using the names '{$accountName}' or '{{user}}'. Acknowledge the user's description: {$localPersona}. CRITICAL FORMATTING RULES: 1. You MUST enclose all your actions, thoughts, and narrations strictly within asterisks (e.g., *I smile softly.*). 2. You MUST meticulously ensure every single opening asterisk has a matching closing asterisk. Never leave an asterisk unclosed!]\n\n";
+        $injection = "[System Directive: The human's name is STRICTLY '{$localUserName}' and their gender is {$localGender}. You are FORBIDDEN from using the names '{$accountName}' or '{{user}}'. Acknowledge the user's description: {$localPersona}. LANGUAGE RULE: You MUST reply ENTIRELY in {$replyLang}. All dialogue, narration, thoughts, and actions must be in {$replyLang}. Never mix in other languages. CRITICAL FORMATTING RULES: 1. You MUST enclose all your actions, thoughts, and narrations strictly within asterisks (e.g., *I smile softly.*). 2. You MUST meticulously ensure every single opening asterisk has a matching closing asterisk. Never leave an asterisk unclosed! 3. When the USER wraps text in asterisks (e.g., *aku sedang ragu*), it represents their character's actions or PRIVATE inner thoughts, NOT spoken words. Your character CANNOT hear or know private thoughts. NEVER react to, quote, or reveal knowledge of the user's inner thoughts unless they speak aloud or perform a visible action.]\n\n";
 
         $finalMessage = $injection . $userMessage;
     }
@@ -46,7 +53,7 @@ try {
         "conversation_id"    => $conversationId, 
         "character_id"       => $characterId,
         "user_persona_id"    => "", // KOSONGKAN agar tidak memakai persona global akun Anda
-        "language"           => "en", // Sesuaikan jika bot Anda berbahasa Indonesia
+        "language"           => $appLanguage, // Sesuaikan jika bot Anda berbahasa Indonesia
         "inference_model"    => $inferenceModel,
         "inference_settings" => [
             "max_new_tokens" => 180,
